@@ -37,4 +37,8 @@ export class EditorController {
       changes: { from: 0, to: this.view.state.doc.length, insert: value },
     });
   }
+
+  refresh(): void {
+    this.view.requestMeasure();
+  }
 }

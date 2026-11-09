@@ -113,6 +113,7 @@ events) clean.
 - On hover/selection, highlight the full path and dim unrelated elements via opacity. Reverse traversal (upstream) is always included.
 - Click a field to pin the highlight; click it again to clear.
 - Keep the **last valid diagram visible** when the DSL temporarily becomes invalid.
+- The source pane can be hidden (toolbar → Hide source) to give the diagram full width; the preference is persisted in localStorage.
 
 ## Performance
 

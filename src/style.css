@@ -90,6 +90,14 @@ button:hover,
   min-height: 0;
 }
 
+.editor-hidden .pane {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.editor-hidden .editor-pane {
+  display: none;
+}
+
 .editor-pane {
   display: flex;
   flex-direction: column;

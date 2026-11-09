@@ -1,6 +1,12 @@
 import { debounce } from "../shared/debounce";
 import { downloadDsl, exportPng, exportSvg } from "../shared/exporters";
-import { buildShareUrl, saveToStorage, updateHash } from "../shared/persistence";
+import {
+  buildShareUrl,
+  loadEditorVisible,
+  saveEditorVisible,
+  saveToStorage,
+  updateHash,
+} from "../shared/persistence";
 import { EXAMPLE_DSL } from "./examples";
 import { copyTextToClipboard } from "./clipboard";
 import { buildAppLayout } from "./appLayout";
@@ -31,6 +37,7 @@ export class AppController {
   private tracePanel: TracePanel | null = null;
   private traceValues: TraceValues | null = null;
   private traceFieldValues: ReadonlyMap<string, FieldValueBadge> | null = null;
+  private editorVisible = true;
   private lastValidData: DiagramData | null = null;
   private readonly debouncedApply: (text: string) => void;
   private readonly debouncedPersist: (text: string) => void;
@@ -63,6 +70,7 @@ export class AppController {
       onLoad: this.loadTraceValues,
       onClear: this.clearTraceValues,
     });
+    this.setEditorVisible(loadEditorVisible(), false);
     this.setInitialToolbarState();
     this.applyDsl(initialDsl);
   }
@@ -77,8 +85,21 @@ export class AppController {
       onCopyShareLink: () => void this.copyShareLink(),
       onDebugConnectionsChange: (enabled: boolean) =>
         this.diagramController.setOptions({ debugConnections: enabled }),
+      onToggleEditor: () => this.setEditorVisible(!this.editorVisible),
       onResetView: () => this.diagramController.resetView(),
     };
+  }
+
+  private setEditorVisible(visible: boolean, persist = true): void {
+    this.editorVisible = visible;
+    this.root.classList.toggle("editor-hidden", !visible);
+    this.toolbarController?.setEditorVisible(visible);
+    if (persist) {
+      saveEditorVisible(visible);
+    }
+    if (visible) {
+      requestAnimationFrame(() => this.editorController?.refresh());
+    }
   }
 
   private setInitialToolbarState(): void {

@@ -1,4 +1,5 @@
 const STORAGE_KEY = "data-flow-dsl";
+const EDITOR_VISIBLE_KEY = "data-flow-editor-visible";
 
 const supportsCompression = () =>
   "CompressionStream" in window && "DecompressionStream" in window;
@@ -50,6 +51,13 @@ export const loadFromStorage = () => localStorage.getItem(STORAGE_KEY);
 
 export const saveToStorage = (text: string) => {
   localStorage.setItem(STORAGE_KEY, text);
+};
+
+export const loadEditorVisible = (): boolean =>
+  localStorage.getItem(EDITOR_VISIBLE_KEY) !== "false";
+
+export const saveEditorVisible = (visible: boolean): void => {
+  localStorage.setItem(EDITOR_VISIBLE_KEY, String(visible));
 };
 
 export const encodeDslToHash = async (text: string) => {

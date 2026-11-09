@@ -9,6 +9,7 @@ import {
 
 export interface AppControls {
   debugConnections: HTMLInputElement;
+  toggleEditor: HTMLButtonElement;
   resetView: HTMLButtonElement;
   resetExample: HTMLButtonElement;
   downloadDsl: HTMLButtonElement;
@@ -45,6 +46,13 @@ const buildToolbarMarkup = (): string => `
         <input id="${ELEMENT_IDS.debugConnections}" type="checkbox" />
         Debug connections
       </label>
+      <button
+        id="${ELEMENT_IDS.toggleEditor}"
+        aria-controls="${ELEMENT_IDS.editor}"
+        aria-expanded="true"
+      >
+        Hide source
+      </button>
       <button id="${ELEMENT_IDS.resetView}">Reset view</button>
     </div>
     <a
@@ -86,6 +94,10 @@ const resolveControls = (): AppControls => ({
   debugConnections: getRequiredElementById(
     ELEMENT_IDS.debugConnections,
     isInputElement,
+  ),
+  toggleEditor: getRequiredElementById(
+    ELEMENT_IDS.toggleEditor,
+    isButtonElement,
   ),
   resetView: getRequiredElementById(ELEMENT_IDS.resetView, isButtonElement),
   resetExample: getRequiredElementById(
