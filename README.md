@@ -17,6 +17,19 @@ Turn a few lines of DSL into an interactive data-flow diagram — in your browse
 - Shareable links via URL hash
 - Local persistence in `localStorage`
 
+## Agent skill
+
+This repo ships the `trace-values` skill for assembling runtime-value overlays
+from a trace and displaying them inline in the diagram. Install it into the
+target project with the open Skills CLI:
+
+```bash
+npx skills add trysingtime/data-flow --skill trace-values -a claude-code
+```
+
+The CLI installs the skill into the target project; the data-flow app itself is
+not installed by the skill.
+
 ## DSL quick start
 ```text
 node UserInput {

@@ -14,8 +14,9 @@ inline badges. The DSL stays schema-only; the overlay is a separate JSON file
 keyed by `NodeId.fieldPath`.
 
 If the user already has an overlay, start at **Validate** and go straight to
-**Display**. Full format and privacy rules: `src/trace/README.md`. Worked pair:
-`src/trace/example-swift-trace.dsl` + `src/trace/example-swift-trace.json`.
+**Display**. Full format and privacy rules live in the data-flow repo at
+`src/trace/README.md`. A worked pair is bundled at
+`references/example-swift-trace.dsl` + `references/example-swift-trace.json`.
 
 ## Workflow
 
@@ -97,7 +98,8 @@ Check, in this order:
 
 ### 5. Display
 
-Run `npm run dev` (or use the running dev server), then:
+Display requires the data-flow app. Run it from a clone of
+`trysingtime/data-flow` (`npm run dev`) or your deployed fork, then:
 
 1. Paste the DSL into the editor.
 2. Toolbar → **Trace values** → choose the JSON.
@@ -130,8 +132,9 @@ rendered badges.
 
 ## Files
 
-- `src/trace/README.md` — overlay format, privacy, export behavior.
-- `src/trace/example-swift-trace.dsl` + `.json` — worked six-stage example.
-- `src/trace/values.ts` — parser and formatting behavior (authoritative).
-- `src/render/fieldValueBadge.ts` — badge rendering and truncation.
 - `references/fls-extraction.md` — FLS/insight-server extraction notes.
+- `references/example-swift-trace.dsl` + `.json` — worked six-stage example
+  bundled with this skill.
+- In the data-flow repo: `src/trace/README.md` (format/privacy),
+  `src/trace/values.ts` (parser/formatting), and
+  `src/render/fieldValueBadge.ts` (badge rendering).
