@@ -11,6 +11,8 @@ export const ELEMENT_IDS = {
   exportSvg: "export-svg",
   exportPng: "export-png",
   copyLink: "copy-link",
+  traceValuesHost: "trace-values-host",
+  toggleEditor: "toggle-editor",
 } as const;
 
 export const DEBOUNCE_MS = {

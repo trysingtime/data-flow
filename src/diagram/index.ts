@@ -11,6 +11,7 @@ export type {
   HighlightState,
   LayoutGroup,
   LayoutNode,
+  LayoutOptions,
   LayoutResult,
 } from "./types";
 export type {

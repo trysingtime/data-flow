@@ -11,6 +11,7 @@ export interface ToolbarCallbacks {
   onExportPng: VoidCallback;
   onCopyShareLink: VoidCallback;
   onDebugConnectionsChange: (enabled: boolean) => void;
+  onToggleEditor: VoidCallback;
   onResetView: VoidCallback;
 }
 
@@ -28,6 +29,16 @@ export class ToolbarController {
     this.controls.debugConnections.checked = value;
   }
 
+  setEditorVisible(visible: boolean): void {
+    this.controls.toggleEditor.textContent = visible
+      ? "Hide source"
+      : "Show source";
+    this.controls.toggleEditor.setAttribute(
+      "aria-expanded",
+      String(visible),
+    );
+  }
+
   private bindEvents(): void {
     this.controls.resetExample.addEventListener("click", () =>
       this.callbacks.onResetExample(),
@@ -43,6 +54,9 @@ export class ToolbarController {
     );
     this.controls.copyLink.addEventListener("click", () =>
       this.callbacks.onCopyShareLink(),
+    );
+    this.controls.toggleEditor.addEventListener("click", () =>
+      this.callbacks.onToggleEditor(),
     );
     this.controls.resetView.addEventListener("click", () =>
       this.callbacks.onResetView(),

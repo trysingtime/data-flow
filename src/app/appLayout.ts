@@ -9,6 +9,7 @@ import {
 
 export interface AppControls {
   debugConnections: HTMLInputElement;
+  toggleEditor: HTMLButtonElement;
   resetView: HTMLButtonElement;
   resetExample: HTMLButtonElement;
   downloadDsl: HTMLButtonElement;
@@ -22,6 +23,7 @@ export interface AppElements {
   editorHost: HTMLElement;
   diagnosticsHost: HTMLElement;
   svg: SVGSVGElement;
+  traceValuesHost: HTMLElement;
   controls: AppControls;
 }
 
@@ -38,11 +40,19 @@ const buildToolbarMarkup = (): string => `
       <button id="${ELEMENT_IDS.exportPng}">Export PNG</button>
       <button id="${ELEMENT_IDS.copyLink}">Copy share link</button>
     </div>
+    <div class="toolbar-group" id="${ELEMENT_IDS.traceValuesHost}"></div>
     <div class="toolbar-group">
       <label class="button">
         <input id="${ELEMENT_IDS.debugConnections}" type="checkbox" />
         Debug connections
       </label>
+      <button
+        id="${ELEMENT_IDS.toggleEditor}"
+        aria-controls="${ELEMENT_IDS.editor}"
+        aria-expanded="true"
+      >
+        Hide source
+      </button>
       <button id="${ELEMENT_IDS.resetView}">Reset view</button>
     </div>
     <a
@@ -85,6 +95,10 @@ const resolveControls = (): AppControls => ({
     ELEMENT_IDS.debugConnections,
     isInputElement,
   ),
+  toggleEditor: getRequiredElementById(
+    ELEMENT_IDS.toggleEditor,
+    isButtonElement,
+  ),
   resetView: getRequiredElementById(ELEMENT_IDS.resetView, isButtonElement),
   resetExample: getRequiredElementById(
     ELEMENT_IDS.resetExample,
@@ -110,6 +124,10 @@ export const buildAppLayout = (root: HTMLElement): AppElements => {
       isHtmlElement,
     ),
     svg: getRequiredElementById(ELEMENT_IDS.diagram, isSvgElement),
+    traceValuesHost: getRequiredElementById(
+      ELEMENT_IDS.traceValuesHost,
+      isHtmlElement,
+    ),
     controls: resolveControls(),
   };
 };

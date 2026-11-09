@@ -42,6 +42,11 @@ body {
   gap: 8px;
 }
 
+button[hidden],
+.button[hidden] {
+  display: none;
+}
+
 button,
 .button {
   display: inline-flex;
@@ -83,6 +88,14 @@ button:hover,
   grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.2fr);
   height: 100%;
   min-height: 0;
+}
+
+.editor-hidden .pane {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.editor-hidden .editor-pane {
+  display: none;
 }
 
 .editor-pane {
@@ -223,4 +236,49 @@ button:hover,
 .empty-state {
   font-size: 14px;
   fill: #6b7280;
+}
+
+/* Optional trace-values overlay. Kept separate from the schema visuals. */
+.trace-values-status {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trace-values-status.is-error {
+  color: #b91c1c;
+}
+
+.field-value-bg {
+  fill: #eef2ff;
+  stroke: #dbe3ff;
+  stroke-width: 0.5;
+}
+
+.field-value-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  fill: #1e3a8a;
+}
+
+.field-value--masked .field-value-bg {
+  fill: #fef3c7;
+  stroke: #fde68a;
+}
+
+.field-value--masked .field-value-text {
+  fill: #92400e;
+}
+
+.field-value--null .field-value-bg {
+  fill: #f8fafc;
+  stroke: #e5e7eb;
+}
+
+.field-value--null .field-value-text {
+  fill: #9ca3af;
+  font-style: italic;
 }

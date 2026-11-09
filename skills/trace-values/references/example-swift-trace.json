@@ -1,0 +1,108 @@
+{
+  "traceId": "7e1e6c7e021d4bba3fcbe615dadb161d",
+  "capturedAt": "2026-11-06T17:35:11.547+0800",
+  "values": {
+    "SwiftTransferCall.userId": { "value": "****", "masked": true },
+    "SwiftTransferCall.commonChannelCode": "airstar",
+    "SwiftTransferCall.commonSystemCode": "EBK",
+    "SwiftTransferCall.transactionNo": {
+      "value": "b3b7ca8bddf54b0ba5b35efe49d6b838",
+      "source": "[API_LOG] swiftTransferCall input"
+    },
+    "SwiftTransferCall.clientNo": "8300003506",
+    "SwiftTransferCall.payerAccount": { "value": "866****636", "masked": true },
+    "SwiftTransferCall.payerCurrency": "HKD",
+    "SwiftTransferCall.payerAmount": "40000",
+    "SwiftTransferCall.payeeName": { "value": "r**", "masked": true },
+    "SwiftTransferCall.payeeAccount": { "value": "345***345", "masked": true },
+    "SwiftTransferCall.payeeRegionCode": "TW",
+    "SwiftTransferCall.payeeBicCode": "AGBTTWTPXXX",
+    "SwiftTransferCall.charge": "5000",
+    "SwiftTransferCall.remark": "4",
+    "SwiftTransferCall.payeePhone": null,
+    "SwiftTransferCall.remittanceRelationship": null,
+
+    "RemittanceRecordInsert.userId": { "value": "****", "masked": true },
+    "RemittanceRecordInsert.transactionNo": "b3b7ca8bddf54b0ba5b35efe49d6b838",
+    "RemittanceRecordInsert.clientNo": "8300003506",
+    "RemittanceRecordInsert.payerFullName": { "value": "r**", "masked": true },
+    "RemittanceRecordInsert.payerAccount": { "value": "866****636", "masked": true },
+    "RemittanceRecordInsert.payeeAccount": { "value": "345***345", "masked": true },
+    "RemittanceRecordInsert.payeeAccountType": "BBAN",
+    "RemittanceRecordInsert.payeeFullName": { "value": "r**", "masked": true },
+    "RemittanceRecordInsert.payeeCustomerType": "individual",
+    "RemittanceRecordInsert.payeeBicCode": "AGBTTWTPXXX",
+    "RemittanceRecordInsert.senderSendingCurrency": "HKD",
+    "RemittanceRecordInsert.senderSendingAmount": "40000",
+    "RemittanceRecordInsert.sendingCurrency": "HKD",
+    "RemittanceRecordInsert.sendingAmount": "40000",
+    "RemittanceRecordInsert.receivingCurrency": "HKD",
+    "RemittanceRecordInsert.receivingAmount": "40000",
+    "RemittanceRecordInsert.originalAmountCharge": "5000",
+    "RemittanceRecordInsert.amountCharge": "5000",
+    "RemittanceRecordInsert.chargeAccount": { "value": "866****636", "masked": true },
+    "RemittanceRecordInsert.chargeAllocation": "payee",
+    "RemittanceRecordInsert.remark": "4",
+    "RemittanceRecordInsert.payeeCountry": "TW",
+    "RemittanceRecordInsert.channelCode": "airstar",
+    "RemittanceRecordInsert.systemCode": "EBK",
+    "RemittanceRecordInsert.batchNumber": {
+      "value": "1094314483773145088",
+      "source": "RemittanceRecordEntityMapper.insert"
+    },
+    "RemittanceRecordInsert.createTime": "2026-11-06 17:35:04.312",
+
+    "SubRemittanceRecordInsert.userId": { "value": "****", "masked": true },
+    "SubRemittanceRecordInsert.transactionNo": "b3b7ca8bddf54b0ba5b35efe49d6b838",
+    "SubRemittanceRecordInsert.payeeAddrRegionCode": "TW",
+    "SubRemittanceRecordInsert.payeeAddrRegionName": "Taiwan China",
+    "SubRemittanceRecordInsert.payeeAddrDetail": { "value": "43****", "masked": true },
+    "SubRemittanceRecordInsert.extInfo": "{\"payeeHoldCnId\":false,\"payeePhone\":null}",
+
+    "HisunSwiftTransferRequest.serialNumber": {
+      "value": "1094314483773145088",
+      "source": "[CORE_BANK_LOG] hisunSwiftTransfer input"
+    },
+    "HisunSwiftTransferRequest.clientId": "8300003506",
+    "HisunSwiftTransferRequest.payerAccount": { "value": "866****636", "masked": true },
+    "HisunSwiftTransferRequest.payerIbsAccount": { "value": "866****636", "masked": true },
+    "HisunSwiftTransferRequest.payerCurrency": "HKD",
+    "HisunSwiftTransferRequest.feeAccount": { "value": "866****636", "masked": true },
+    "HisunSwiftTransferRequest.feeCurrency": "HKD",
+    "HisunSwiftTransferRequest.feeAmount": "5000",
+    "HisunSwiftTransferRequest.remittanceCurrency": "HKD",
+    "HisunSwiftTransferRequest.remittanceAmount": "40000",
+    "HisunSwiftTransferRequest.payeeAccount": { "value": "345***345", "masked": true },
+    "HisunSwiftTransferRequest.payeeName": { "value": "r**", "masked": true },
+    "HisunSwiftTransferRequest.payeeCountry": "TW",
+    "HisunSwiftTransferRequest.payeeOpeningBank": "AGBTTWTPXXX",
+    "HisunSwiftTransferRequest.bankCharge": "2",
+    "HisunSwiftTransferRequest.remark1": "4",
+    "HisunSwiftTransferRequest.payeeAddrCountryCode": "TW",
+    "HisunSwiftTransferRequest.payeeAddrDetail": { "value": "43****", "masked": true },
+
+    "HisunSwiftTransferResponse.code": "200",
+    "HisunSwiftTransferResponse.errorCode": {
+      "value": "0000",
+      "source": "[CORE_BANK_LOG] hisunSwiftTransfer return"
+    },
+    "HisunSwiftTransferResponse.paymentReference": "395OR281067769",
+    "HisunSwiftTransferResponse.swiftReference": "765b38ea-28e0-4e8f-8a44-25ed286a06bb",
+
+    "RemittanceRecordUpdate.paymentReference": "395OR281067769",
+    "RemittanceRecordUpdate.transferListid": "765b38ea-28e0-4e8f-8a44-25ed286a06bb",
+    "RemittanceRecordUpdate.hisunTransferStatus": {
+      "value": "success",
+      "source": "updateByExampleSelective (post-response)"
+    },
+
+    "SwiftTransferRsp.code": "200",
+    "SwiftTransferRsp.status": {
+      "value": "pending",
+      "source": "transfer result: SwiftTransferRsp"
+    },
+    "SwiftTransferRsp.transactionNo": "b3b7ca8bddf54b0ba5b35efe49d6b838",
+    "SwiftTransferRsp.batchNumber": "1094314483773145088",
+    "SwiftTransferRsp.commitTime": "1793957704312"
+  }
+}

@@ -24,6 +24,12 @@ const inlineSvgStyles = `
 .edge--active { stroke: #2196f3; stroke-width: 3; }
 .edge--reverse { stroke: #2196f3; stroke-width: 3; }
 .dim { opacity: 0.2; }
+.field-value-bg { fill: #eef2ff; stroke: #dbe3ff; stroke-width: 0.5; }
+.field-value-text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9.5px; fill: #1e3a8a; }
+.field-value--masked .field-value-bg { fill: #fef3c7; stroke: #fde68a; }
+.field-value--masked .field-value-text { fill: #92400e; }
+.field-value--null .field-value-bg { fill: #f8fafc; stroke: #e5e7eb; }
+.field-value--null .field-value-text { fill: #9ca3af; font-style: italic; }
 `;
 
 const serializeSvg = (svg: SVGSVGElement) => {
