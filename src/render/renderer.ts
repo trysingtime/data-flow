@@ -1,4 +1,8 @@
 import { PANZOOM_EXCLUDE_CLASS } from "./constants";
+import {
+  createFieldValueBadge,
+  type FieldValueBadge,
+} from "./fieldValueBadge";
 import type {
   BundledEdge,
   DiagramModel,
@@ -29,6 +33,7 @@ export interface RenderOptions {
   bundles: BundledEdge[];
   highlight: HighlightState;
   debugConnections: boolean;
+  fieldValues?: ReadonlyMap<string, FieldValueBadge> | null;
 }
 
 interface ValidatedRenderOptions {
@@ -37,6 +42,7 @@ interface ValidatedRenderOptions {
   bundles: BundledEdge[];
   highlight: HighlightState;
   debugConnections: boolean;
+  fieldValues: ReadonlyMap<string, FieldValueBadge> | null;
 }
 
 export class DiagramRenderer {
@@ -71,6 +77,7 @@ export class DiagramRenderer {
       bundles: options.bundles,
       highlight: options.highlight,
       debugConnections: options.debugConnections,
+      fieldValues: options.fieldValues ?? null,
     };
   }
 
@@ -81,6 +88,7 @@ export class DiagramRenderer {
       bundles: options.bundles,
       highlight: options.highlight,
       debugConnections: options.debugConnections,
+      fieldValues: options.fieldValues,
       labelById: this.buildLabelMap(options.diagram),
     };
   }
@@ -259,7 +267,7 @@ export class DiagramRenderer {
       );
       nodeGroup.appendChild(createNodeRect(node));
       nodeGroup.appendChild(createNodeTitle(node, label));
-      this.renderFields(nodeGroup, node, context.highlight);
+      this.renderFields(nodeGroup, node, context);
       groups.appendChild(nodeGroup);
     });
   }
@@ -267,17 +275,28 @@ export class DiagramRenderer {
   private renderFields(
     nodeGroup: SVGGElement,
     node: LayoutResult["nodes"][number],
-    highlight: HighlightState,
+    context: RenderContext,
   ): void {
     node.fields.forEach((field) => {
-      const isActive = highlight.activeFieldKeys.has(field.key);
+      const isActive = context.highlight.activeFieldKeys.has(field.key);
       const isReverse =
-        !isActive && highlight.reverseFieldKeys.has(field.key);
-      const className = buildFieldClassName(highlight, isActive, isReverse);
+        !isActive && context.highlight.reverseFieldKeys.has(field.key);
+      const className = buildFieldClassName(
+        context.highlight,
+        isActive,
+        isReverse,
+      );
       const fieldGroup = createSvgGroup(className);
       fieldGroup.setAttribute("data-field-key", field.key);
       fieldGroup.appendChild(createFieldBackground(field));
       fieldGroup.appendChild(createFieldText(field));
+      const value = context.fieldValues?.get(field.key);
+      if (value) {
+        const badge = createFieldValueBadge(field, value);
+        if (badge) {
+          fieldGroup.appendChild(badge);
+        }
+      }
       nodeGroup.appendChild(fieldGroup);
     });
   }
@@ -289,6 +308,7 @@ interface RenderContext {
   bundles: BundledEdge[];
   highlight: HighlightState;
   debugConnections: boolean;
+  fieldValues: ReadonlyMap<string, FieldValueBadge> | null;
   labelById: LabelMap;
 }
 

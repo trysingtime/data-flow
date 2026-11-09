@@ -2,7 +2,7 @@ import { parseDsl, validateDiagram } from "../dsl";
 import { buildGraph, bundleConnections } from "./graph";
 import { computeLayout } from "./layout";
 import type { Diagnostic } from "../dsl";
-import type { DiagramData } from "./types";
+import type { DiagramData, LayoutOptions } from "./types";
 
 export interface DiagramBuildResult {
   diagnostics: Diagnostic[];
@@ -11,7 +11,10 @@ export interface DiagramBuildResult {
 }
 
 export class DiagramBuilder {
-  build(text: string): DiagramBuildResult {
+  build(
+    text: string,
+    layoutOptions: LayoutOptions = {},
+  ): DiagramBuildResult {
     const parsed = parseDsl(text);
     if (!parsed.diagram) {
       return { diagnostics: parsed.diagnostics, data: null, hasErrors: true };
@@ -29,7 +32,7 @@ export class DiagramBuilder {
     const diagram = validation.diagram;
     const bundles = bundleConnections(diagram);
     const graph = buildGraph(diagram);
-    const layout = computeLayout(diagram, bundles);
+    const layout = computeLayout(diagram, bundles, layoutOptions);
 
     return {
       diagnostics,

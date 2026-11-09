@@ -6,6 +6,7 @@ import type {
   FieldLayout,
   LayoutGroup,
   LayoutNode,
+  LayoutOptions,
   LayoutResult,
 } from "./types";
 import { getEdgePoints, getGraphBounds, getNodePosition } from "./dagreTypes";
@@ -45,6 +46,7 @@ const buildFieldRows = (
 const estimateNodeSize = (
   label: string,
   rows: FieldRow[],
+  valueColumnWidth = 0,
 ): { width: number; height: number } => {
   let maxWidth = label.length * CHAR_WIDTH + NODE_PADDING_X * 2;
   for (const row of rows) {
@@ -56,7 +58,7 @@ const estimateNodeSize = (
       maxWidth = rowWidth;
     }
   }
-  const width = Math.max(NODE_MIN_WIDTH, maxWidth);
+  const width = Math.max(NODE_MIN_WIDTH, maxWidth) + valueColumnWidth;
   const height =
     NODE_PADDING_Y * 2 +
     HEADER_HEIGHT +
@@ -65,9 +67,16 @@ const estimateNodeSize = (
   return { width, height };
 };
 
+type NodeSize = {
+  width: number;
+  height: number;
+  rows: FieldRow[];
+  valueColumnWidth: number;
+};
+
 const buildLayoutNode = (
   node: DiagramModel["nodes"][number],
-  size: { width: number; height: number; rows: FieldRow[] },
+  size: NodeSize,
   x: number,
   y: number,
   fieldLayouts: Map<string, FieldLayout>,
@@ -87,6 +96,7 @@ const buildLayoutNode = (
       y: rowY,
       width: size.width - NODE_PADDING_X * 2,
       height: ROW_HEIGHT,
+      valueWidth: size.valueColumnWidth,
     };
     fields.push(layout);
     fieldLayouts.set(layout.key, layout);
@@ -102,16 +112,31 @@ const buildLayoutNode = (
   };
 };
 
-const buildNodeSizing = (diagram: DiagramModel) => {
-  const nodeSizing = new Map<
-    string,
-    { width: number; height: number; rows: FieldRow[] }
-  >();
+const buildNodeSizing = (
+  diagram: DiagramModel,
+  options: LayoutOptions = {},
+): Map<string, NodeSize> => {
+  const nodeSizing = new Map<string, NodeSize>();
+  const valueKeys = options.fieldValueKeys;
+  const valueColumnWidth = options.fieldValueColumnWidth ?? 0;
 
   for (const node of diagram.nodes) {
     const rows = buildFieldRows(node.fields);
-    const size = estimateNodeSize(node.label ?? node.id, rows);
-    nodeSizing.set(node.id, { ...size, rows });
+    const hasValues = Boolean(
+      valueKeys?.size &&
+        rows.some((row) => valueKeys.has(`${node.id}.${row.path}`)),
+    );
+    const resolvedValueWidth = hasValues ? valueColumnWidth : 0;
+    const size = estimateNodeSize(
+      node.label ?? node.id,
+      rows,
+      resolvedValueWidth,
+    );
+    nodeSizing.set(node.id, {
+      ...size,
+      rows,
+      valueColumnWidth: resolvedValueWidth,
+    });
   }
 
   return nodeSizing;
@@ -120,6 +145,7 @@ const buildNodeSizing = (diagram: DiagramModel) => {
 const computeDagreLayout = (
   diagram: DiagramModel,
   bundles: BundledEdge[],
+  options: LayoutOptions,
 ): LayoutResult => {
   const graph = new dagre.graphlib.Graph();
   graph.setGraph({
@@ -132,7 +158,7 @@ const computeDagreLayout = (
   });
   graph.setDefaultEdgeLabel(() => ({}));
 
-  const nodeSizing = buildNodeSizing(diagram);
+  const nodeSizing = buildNodeSizing(diagram, options);
 
   for (const node of diagram.nodes) {
     const size = nodeSizing.get(node.id);
@@ -189,8 +215,11 @@ const computeDagreLayout = (
   };
 };
 
-const computeGroupedLayout = (diagram: DiagramModel): LayoutResult => {
-  const nodeSizing = buildNodeSizing(diagram);
+const computeGroupedLayout = (
+  diagram: DiagramModel,
+  options: LayoutOptions,
+): LayoutResult => {
+  const nodeSizing = buildNodeSizing(diagram, options);
   const nodeById = new Map(diagram.nodes.map((node) => [node.id, node]));
   const nodes: LayoutNode[] = [];
   const nodeIndex = new Map<string, LayoutNode>();
@@ -215,7 +244,7 @@ const computeGroupedLayout = (diagram: DiagramModel): LayoutResult => {
     const sizes = nodeIds
       .map((nodeId) => nodeSizing.get(nodeId))
       .filter(
-        (value): value is { width: number; height: number; rows: FieldRow[] } =>
+        (value): value is NodeSize =>
           Boolean(value),
       );
 
@@ -265,7 +294,7 @@ const computeGroupedLayout = (diagram: DiagramModel): LayoutResult => {
     const sizes = ungroupedNodeIds
       .map((nodeId) => nodeSizing.get(nodeId))
       .filter(
-        (value): value is { width: number; height: number; rows: FieldRow[] } =>
+        (value): value is NodeSize =>
           Boolean(value),
       );
     const maxNodeWidth = sizes.reduce(
@@ -315,9 +344,10 @@ const computeGroupedLayout = (diagram: DiagramModel): LayoutResult => {
 export function computeLayout(
   diagram: DiagramModel,
   bundles: BundledEdge[],
+  options: LayoutOptions = {},
 ): LayoutResult {
   if (diagram.groups?.length) {
-    return computeGroupedLayout(diagram);
+    return computeGroupedLayout(diagram, options);
   }
-  return computeDagreLayout(diagram, bundles);
+  return computeDagreLayout(diagram, bundles, options);
 }

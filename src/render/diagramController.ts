@@ -4,6 +4,7 @@ import { computeHighlight } from "../diagram";
 import { DiagramRenderer } from "./renderer";
 import { PANZOOM_CONFIG } from "../app/constants";
 import { PANZOOM_EXCLUDE_CLASS } from "./constants";
+import type { FieldValueBadge } from "./fieldValueBadge";
 import type { DiagramData, HighlightState } from "../diagram";
 
 export interface DiagramOptions {
@@ -14,6 +15,7 @@ type PanzoomController = ReturnType<typeof Panzoom>;
 
 export class DiagramController {
   private data: DiagramData | null = null;
+  private fieldValues: ReadonlyMap<string, FieldValueBadge> | null = null;
   private options: DiagramOptions = {
     debugConnections: false,
   };
@@ -35,8 +37,12 @@ export class DiagramController {
     this.bindEvents();
   }
 
-  setData(data: DiagramData | null): void {
+  setData(
+    data: DiagramData | null,
+    fieldValues: ReadonlyMap<string, FieldValueBadge> | null = this.fieldValues,
+  ): void {
     this.data = data;
+    this.fieldValues = fieldValues;
     this.clearSelection();
     this.render();
   }
@@ -118,6 +124,7 @@ export class DiagramController {
       bundles: this.data?.bundles ?? [],
       highlight,
       debugConnections: this.options.debugConnections,
+      fieldValues: this.fieldValues,
     });
   }
 

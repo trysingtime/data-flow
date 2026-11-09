@@ -58,9 +58,19 @@ events) clean.
 **Shell (DOM / event-driven):**
 - `src/editor/editorController.ts` — CodeMirror 6 integration
 - `src/render/renderer.ts` — native SVG rendering
+- `src/render/fieldValueBadge.ts` — inline trace-value badges inside field rows
 - `src/render/diagramController.ts` — interaction + zoom/pan (`@panzoom/panzoom`)
+- `src/trace/` — optional runtime-value overlay: JSON parsing/formatting, toolbar panel, sample overlay (see `src/trace/README.md`)
 - `src/shared/` — `persistence.ts` (localStorage), `exporters.ts` (SVG/PNG export), `debounce.ts`
 - `src/app/` — composition root and UI wiring (`appController.ts`, `toolbarController.ts`, `diagnosticsRenderer.ts`, `dom.ts`, `constants.ts`, `examples.ts`, `initialDsl.ts`)
+
+**Runtime values (optional overlay):**
+- The DSL stays schema-only. Runtime values are loaded from a separate JSON file
+  (toolbar → Trace values), keyed by `Node.field`. The layout reserves a value
+  column only for nodes that have values.
+- Values live in memory: they are not written to `localStorage`, the share URL,
+  or the DSL export. SVG/PNG exports do include the rendered badges.
+- Format, masking, and unknown-key behavior: `src/trace/README.md`.
 
 **Entry points:**
 - `index.html` → `src/main.ts` → `src/app.ts` (`initApp`) → `AppController`

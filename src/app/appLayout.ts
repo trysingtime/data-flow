@@ -22,6 +22,7 @@ export interface AppElements {
   editorHost: HTMLElement;
   diagnosticsHost: HTMLElement;
   svg: SVGSVGElement;
+  traceValuesHost: HTMLElement;
   controls: AppControls;
 }
 
@@ -38,6 +39,7 @@ const buildToolbarMarkup = (): string => `
       <button id="${ELEMENT_IDS.exportPng}">Export PNG</button>
       <button id="${ELEMENT_IDS.copyLink}">Copy share link</button>
     </div>
+    <div class="toolbar-group" id="${ELEMENT_IDS.traceValuesHost}"></div>
     <div class="toolbar-group">
       <label class="button">
         <input id="${ELEMENT_IDS.debugConnections}" type="checkbox" />
@@ -110,6 +112,10 @@ export const buildAppLayout = (root: HTMLElement): AppElements => {
       isHtmlElement,
     ),
     svg: getRequiredElementById(ELEMENT_IDS.diagram, isSvgElement),
+    traceValuesHost: getRequiredElementById(
+      ELEMENT_IDS.traceValuesHost,
+      isHtmlElement,
+    ),
     controls: resolveControls(),
   };
 };

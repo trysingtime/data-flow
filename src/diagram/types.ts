@@ -41,6 +41,18 @@ export interface FieldLayout {
   y: number;
   width: number;
   height: number;
+  /** Width reserved for an optional field-value column; 0 when unused. */
+  valueWidth: number;
+}
+
+/**
+ * Optional layout inputs. Kept generic so the diagram core does not depend on
+ * the trace-values feature: callers pass the set of field keys that have an
+ * external value and the width to reserve for the value column.
+ */
+export interface LayoutOptions {
+  fieldValueKeys?: ReadonlySet<string>;
+  fieldValueColumnWidth?: number;
 }
 
 export interface LayoutNode {

@@ -11,6 +11,14 @@ import { loadInitialDsl } from "./initialDsl";
 import { ToolbarCallbacks, ToolbarController } from "./toolbarController";
 import { EditorController } from "../editor/editorController";
 import { DiagramController } from "../render";
+import {
+  TracePanel,
+  buildTraceFieldValues,
+  buildTraceLayoutOptions,
+  countUnknownTraceValues,
+} from "../trace";
+import type { TraceValues } from "../trace";
+import type { FieldValueBadge } from "../render";
 
 export class AppController {
   private readonly root: HTMLElement;
@@ -20,6 +28,9 @@ export class AppController {
   private readonly elements: ReturnType<typeof buildAppLayout>;
   private editorController: EditorController | null = null;
   private toolbarController: ToolbarController | null = null;
+  private tracePanel: TracePanel | null = null;
+  private traceValues: TraceValues | null = null;
+  private traceFieldValues: ReadonlyMap<string, FieldValueBadge> | null = null;
   private lastValidData: DiagramData | null = null;
   private readonly debouncedApply: (text: string) => void;
   private readonly debouncedPersist: (text: string) => void;
@@ -48,6 +59,10 @@ export class AppController {
       this.elements.controls,
       this.buildToolbarCallbacks(),
     );
+    this.tracePanel = new TracePanel(this.elements.traceValuesHost, {
+      onLoad: this.loadTraceValues,
+      onClear: this.clearTraceValues,
+    });
     this.setInitialToolbarState();
     this.applyDsl(initialDsl);
   }
@@ -80,18 +95,43 @@ export class AppController {
     updateHash(text).catch(() => undefined);
   };
 
+  private loadTraceValues = (trace: TraceValues): void => {
+    this.traceValues = trace;
+    this.traceFieldValues = buildTraceFieldValues(trace);
+    this.tracePanel?.setSummary(trace, 0);
+    this.applyDsl(this.requireEditor().getValue());
+    this.diagramController.resetView();
+  };
+
+  private clearTraceValues = (): void => {
+    this.traceValues = null;
+    this.traceFieldValues = null;
+    this.applyDsl(this.requireEditor().getValue());
+    this.diagramController.resetView();
+  };
+
   private applyDsl = (text: string): void => {
-    const result = this.diagramBuilder.build(text);
+    const result = this.diagramBuilder.build(
+      text,
+      buildTraceLayoutOptions(this.traceValues),
+    );
     this.diagnosticsRenderer.render(result.diagnostics);
 
     if (result.data) {
       this.lastValidData = result.data;
-      this.diagramController.setData(result.data);
+      this.diagramController.setData(result.data, this.traceFieldValues);
+      const unknown = this.traceValues
+        ? countUnknownTraceValues(
+            this.traceValues,
+            result.data.graph.fieldIndex,
+          )
+        : 0;
+      this.tracePanel?.setSummary(this.traceValues, unknown);
       return;
     }
 
     if (!this.lastValidData) {
-      this.diagramController.setData(null);
+      this.diagramController.setData(null, this.traceFieldValues);
     }
   };
 
