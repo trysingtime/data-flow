@@ -44,6 +44,9 @@ artifact.
 }
 ```
 
+`source` is free-form. The labels in this example come from the sample FLS
+trace; they are illustrative.
+
 - Key: `NodeId.fieldPath`, exactly as shown in the DSL (`body.username` for
   nested fields).
 - Value: a primitive (`string`, `number`, `boolean`, `null`) or
